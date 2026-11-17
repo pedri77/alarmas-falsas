@@ -1,0 +1,298 @@
+@import "tailwindcss";
+
+/* Fuentes: Google Fonts en index.html (Bricolage Grotesque + Inter), como el resto de webs del registro. */
+
+/* ------------------------------------------------------------------
+   Tokens. Por defecto «papel claro»: un explorable se lee y se toca como un cuaderno.
+   Cambia valores, no nombres (los componentes usan void, superficie, acento, texto…).
+   Elige la variante con el registro de web-cinematica/references/variantes.md.
+   ------------------------------------------------------------------ */
+@theme {
+  --font-display: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-cifra: "Bricolage Grotesque", "Inter", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+
+  /* Variante «sala de alarmas»: grafito, rojo de alarma, turquesa para lo real, ámbar para lo que se escapa. */
+  --color-void: oklch(18.5% 0.012 255);
+  --color-superficie: oklch(22.5% 0.014 255);
+  --color-elevado: oklch(27% 0.016 255);
+  --color-borde: oklch(35% 0.018 255);
+  --color-acento: oklch(66% 0.21 25);
+  --color-acento-2: oklch(80% 0.12 185);
+  --color-escapa: oklch(84% 0.15 85);
+  --color-punto: oklch(42% 0.02 255);
+  --color-texto: oklch(95% 0.008 255);
+  --color-texto-2: oklch(78% 0.014 255);
+  --color-texto-3: oklch(64% 0.016 255);
+
+  --text-hero: clamp(2.75rem, 7vw, 6rem);
+  --text-hero--line-height: 0.98;
+  --text-display: clamp(1.75rem, 3.6vw, 3rem);
+  --text-display--line-height: 1.1;
+  --text-lead: clamp(1.125rem, 1.6vw, 1.375rem);
+  --text-lead--line-height: 1.5;
+  --text-body: clamp(0.9375rem, 1.05vw, 1.0625rem);
+  --text-body--line-height: 1.65;
+  --text-etiqueta: 0.6875rem;
+  --text-etiqueta--line-height: 1.3;
+  --text-etiqueta--letter-spacing: 0.14em;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    background: var(--color-void);
+  }
+  body {
+    margin: 0;
+    background: var(--color-void);
+    color: var(--color-texto);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+  ::selection {
+    background: color-mix(in oklch, var(--color-acento) 30%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-acento);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+@layer components {
+  .tarjeta {
+    background: var(--color-superficie);
+    border: 1px solid var(--color-borde);
+    border-radius: 14px;
+    padding: clamp(1.25rem, 3vw, 2rem);
+    box-shadow: 0 1px 0 color-mix(in oklch, var(--color-texto) 6%, transparent);
+  }
+  .boton,
+  .boton-sec {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px; /* objetivo táctil */
+    padding: 0 1.1rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    cursor: pointer;
+  }
+  .boton {
+    background: var(--color-acento);
+    color: var(--color-void);
+  }
+  .boton-sec {
+    border: 1px solid var(--color-borde);
+    color: var(--color-texto);
+    background: transparent;
+  }
+  .boton-sec[aria-pressed="true"] {
+    background: var(--color-elevado);
+  }
+
+  /* Deslizador: pista rellena hasta --pct. Pulgar grande para el dedo (≥ 28 px). */
+  .deslizador input[type="range"] {
+    appearance: none;
+    width: 100%;
+    height: 44px;
+    background: transparent;
+    cursor: pointer;
+    touch-action: pan-y;
+  }
+  .deslizador input[type="range"]::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, var(--color-acento) var(--pct), var(--color-borde) var(--pct));
+  }
+  .deslizador input[type="range"]::-moz-range-track {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(to right, var(--color-acento) var(--pct), var(--color-borde) var(--pct));
+  }
+  .deslizador input[type="range"]::-webkit-slider-thumb {
+    appearance: none;
+    width: 28px;
+    height: 28px;
+    margin-top: -11px;
+    border-radius: 50%;
+    background: var(--color-superficie);
+    border: 2px solid var(--color-acento);
+    box-shadow: 0 2px 6px color-mix(in oklch, var(--color-texto) 20%, transparent);
+  }
+  .deslizador input[type="range"]::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-superficie);
+    border: 2px solid var(--color-acento);
+  }
+
+  .opciones {
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+  .opciones label span {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0 0.9rem;
+    border: 1px solid var(--color-borde);
+    border-radius: 999px;
+    cursor: pointer;
+  }
+  .opciones input:checked + span {
+    background: var(--color-texto);
+    color: var(--color-superficie);
+    border-color: var(--color-texto);
+  }
+  .opciones input:focus-visible + span {
+    outline: 2px solid var(--color-acento);
+    outline-offset: 2px;
+  }
+
+  .arrastrable {
+    fill: var(--color-superficie);
+    stroke: var(--color-acento);
+    stroke-width: 3;
+    cursor: grab;
+    touch-action: none;
+  }
+  .arrastrable:active {
+    cursor: grabbing;
+  }
+  .arrastrable:focus-visible {
+    outline: none;
+    stroke-width: 5;
+  }
+}
+
+@layer utilities {
+  [data-aparece] {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+    transition:
+      opacity 0.5s cubic-bezier(0.2, 0.7, 0.1, 1),
+      transform 0.5s cubic-bezier(0.2, 0.7, 0.1, 1);
+    transition-delay: calc(var(--i, 0) * 80ms);
+  }
+  [data-aparece].dentro {
+    opacity: 1;
+    transform: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    [data-aparece] {
+      transform: none;
+      transition-duration: 0.01ms;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   Piezas propias de «alarmas falsas».
+   ------------------------------------------------------------------ */
+@layer components {
+  .ficha {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    flex: none;
+  }
+  .ficha-falsa {
+    background: var(--color-acento);
+    border-radius: 2px;
+  }
+  .ficha-real {
+    background: var(--color-acento-2);
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px var(--color-superficie), 0 0 0 3px var(--color-acento-2);
+  }
+  .ficha-escapa {
+    border: 2.5px solid var(--color-escapa);
+    border-radius: 50%;
+  }
+  .ficha-normal {
+    width: 4px;
+    height: 4px;
+    margin: 3px;
+    background: var(--color-punto);
+  }
+  .leyenda {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin: 1rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8125rem;
+    color: var(--color-texto-2);
+  }
+  .leyenda li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .bandeja {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 0.75rem;
+    max-height: 18rem;
+    overflow: hidden;
+  }
+
+  .campanas {
+    touch-action: none;
+    cursor: ew-resize;
+  }
+  .campanas .zona-normal {
+    fill: color-mix(in oklch, var(--color-punto) 45%, transparent);
+  }
+  .campanas .zona-falsa {
+    fill: color-mix(in oklch, var(--color-acento) 70%, transparent);
+  }
+  .campanas .zona-escapa {
+    fill: color-mix(in oklch, var(--color-escapa) 70%, transparent);
+  }
+  .campanas .zona-real {
+    fill: color-mix(in oklch, var(--color-acento-2) 70%, transparent);
+  }
+  .campanas .linea-normal,
+  .campanas .linea-ataque {
+    fill: none;
+    stroke: var(--color-texto-2);
+    stroke-width: 1.5;
+  }
+  .campanas .linea-ataque {
+    stroke-dasharray: 5 4;
+  }
+  .campanas .eje {
+    stroke: var(--color-borde);
+  }
+  .campanas .eje-texto,
+  .campanas .rotulo {
+    fill: var(--color-texto-3);
+    font-size: 13px;
+    font-family: var(--font-sans);
+  }
+  .campanas .rotulo {
+    fill: var(--color-texto-2);
+  }
+  .campanas .umbral {
+    stroke: var(--color-texto);
+    stroke-width: 2;
+  }
+  .campanas .umbral-asa {
+    fill: var(--color-texto);
+  }
+  .campanas .umbral-texto {
+    fill: var(--color-void);
+    font-size: 12.5px;
+    font-weight: 700;
+    font-family: var(--font-sans);
+  }
+}
